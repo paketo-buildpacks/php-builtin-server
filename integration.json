@@ -1,0 +1,4 @@
+{
+  "builder": "index.docker.io/paketobuildpacks/builder:buildpackless-full",
+  "php-dist": "github.com/paketo-buildpacks/php-dist"
+}
