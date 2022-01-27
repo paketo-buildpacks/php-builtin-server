@@ -23,7 +23,7 @@ func testDefault(t *testing.T, context spec.G, it spec.S) {
 	)
 
 	it.Before(func() {
-		pack = occam.NewPack().WithVerbose().WithNoColor()
+		pack = occam.NewPack().WithNoColor()
 		docker = occam.NewDocker()
 	})
 
@@ -61,6 +61,9 @@ func testDefault(t *testing.T, context spec.G, it spec.S) {
 					phpDistBuildpack,
 					buildpack,
 				).
+				WithEnv(map[string]string{
+					"BP_PHP_WEB_DIR": "htdocs",
+				}).
 				Execute(name, source)
 			Expect(err).ToNot(HaveOccurred(), logs.String)
 
@@ -77,7 +80,7 @@ func testDefault(t *testing.T, context spec.G, it spec.S) {
 			Expect(logs).To(ContainLines(
 				MatchRegexp(fmt.Sprintf(`%s \d+\.\d+\.\d+`, buildpackInfo.Buildpack.Name)),
 				"  Assigning launch processes",
-				`    web: php -S 0.0.0.0:"${8080:-80}" -t /workspace`,
+				`    web: php -S 0.0.0.0:"${PORT:-80}" -t htdocs`,
 			))
 		})
 	})
