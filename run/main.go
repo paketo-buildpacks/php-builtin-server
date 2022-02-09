@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	logger := scribe.NewLogger(os.Stdout)
+	logger := scribe.NewEmitter(os.Stdout)
 	packit.Run(
 		phpbuiltinserver.Detect(),
 		phpbuiltinserver.Build(logger),

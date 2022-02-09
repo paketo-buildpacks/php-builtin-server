@@ -39,7 +39,7 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 		Expect(err).NotTo(HaveOccurred())
 
 		buffer = bytes.NewBuffer(nil)
-		logger := scribe.NewLogger(buffer)
+		logger := scribe.NewEmitter(buffer)
 		build = phpbuiltinserver.Build(logger)
 	})
 
@@ -75,15 +75,20 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 					Processes: []packit.Process{
 						{
 							Type:    "web",
-							Command: fmt.Sprintf(`php -S 0.0.0.0:"${PORT:-80}" -t %s`, workingDir),
+							Command: "bash",
+							Args: []string{
+								"-c",
+								fmt.Sprintf(`php -S 0.0.0.0:"${PORT:-80}" -t %s`, workingDir),
+							},
 							Default: true,
+							Direct:  true,
 						},
 					},
 				},
 			}))
 			Expect(buffer.String()).To(ContainSubstring("Some Buildpack some-version"))
-			Expect(buffer.String()).To(ContainSubstring("Assigning launch processes"))
-			Expect(buffer.String()).To(ContainSubstring(fmt.Sprintf(`web: php -S 0.0.0.0:"${PORT:-80}" -t %s`, workingDir)))
+			Expect(buffer.String()).To(ContainSubstring("Assigning launch processes:"))
+			Expect(buffer.String()).To(ContainSubstring(fmt.Sprintf(`web (default): bash -c php -S 0.0.0.0:"${PORT:-80}" -t %s`, workingDir)))
 		})
 	})
 
@@ -119,15 +124,20 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 					Processes: []packit.Process{
 						{
 							Type:    "web",
-							Command: `php -S 0.0.0.0:"${PORT:-80}" -t some-web-dir`,
+							Command: "bash",
+							Args: []string{
+								"-c",
+								`php -S 0.0.0.0:"${PORT:-80}" -t some-web-dir`,
+							},
 							Default: true,
+							Direct:  true,
 						},
 					},
 				},
 			}))
 			Expect(buffer.String()).To(ContainSubstring("Some Buildpack some-version"))
-			Expect(buffer.String()).To(ContainSubstring("Assigning launch processes"))
-			Expect(buffer.String()).To(ContainSubstring(`web: php -S 0.0.0.0:"${PORT:-80}" -t some-web-dir`))
+			Expect(buffer.String()).To(ContainSubstring("Assigning launch processes:"))
+			Expect(buffer.String()).To(ContainSubstring(`web (default): bash -c php -S 0.0.0.0:"${PORT:-80}" -t some-web-dir`))
 		})
 
 	})
