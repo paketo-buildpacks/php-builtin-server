@@ -17,22 +17,22 @@ The buildpack will do the following:
 
 ## Configuration
 
-### `BP_PHP_WEBDIR`
-The web directory or document root can be configured via the `BP_PHP_WEBDIR`
+### `BP_PHP_WEB_DIR`
+The web directory or document root can be configured via the `BP_PHP_WEB_DIR`
 environment variable. Set the environment variables at build time either
 directly  or through a [`project.toml`
 file](https://github.com/buildpacks/spec/blob/main/extensions/project-descriptor.md).
 
 #### `pack build` flag
 ```shell
-pack build my-app --env BP_PHP_WEBDIR="htdocs"
+pack build my-app --env BP_PHP_WEB_DIR="htdocs"
 ```
 
 #### In a [`project.toml`](https://github.com/buildpacks/spec/blob/main/extensions/project-descriptor.md)
 ```toml
 [build]
   [[build.env]]
-    name = 'BP_PHP_WEBDIR'
+    name = 'BP_PHP_WEB_DIR'
     value = 'htdocs'
 ```
 
