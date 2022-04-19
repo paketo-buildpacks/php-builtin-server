@@ -15,6 +15,10 @@ The buildpack will do the following:
 * At run time:
   - Contribute a start command for the PHP built-in webserver
 
+This buildpack `requires` `php` at launch time, and will also optionally
+`require` `composer-packages` at launch-time if the application contains a
+`composer.json` file or the `$COMPOSER` environment variable is set.
+
 ## Configuration
 
 ### `BP_PHP_WEB_DIR`
