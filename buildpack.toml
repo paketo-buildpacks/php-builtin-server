@@ -5,7 +5,7 @@ api = "0.7"
   homepage = "https://github.com/paketo-buildpacks/php-builtin-server"
   id = "paketo-buildpacks/php-builtin-server"
   keywords = ["php", "builtin-server"]
-  name = "Paketo Built-in Server Buildpack"
+  name = "Paketo PHP Built-in Server Buildpack"
 
   [[buildpack.licenses]]
     type = "Apache-2.0"
