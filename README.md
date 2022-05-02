@@ -6,10 +6,14 @@ The buildpack is published for consumption at `gcr.io/paketo-buildpacks/php-buil
 `paketo-buildpacks/php-builtin-server`.
 
 ## Behavior
-This buildpack is the default web-server in the PHP buildpack.
-If the `BP_PHP_SERVER` environment variable is set to `php-server` at
-build-time this buildpack will participate. It will also participate if the
-environment variable isn't set at all.
+This buildpack is the default web-server in the PHP buildpack, and it will pass
+detection as long as there is a `*.php` file found in the web directory. More
+information about how to set the web directory path is available in the
+"Configuration" section below.
+Users can declare an explicit intention to use the built-in server if the
+`BP_PHP_SERVER` environment variable is set to `php-server` at build-time this
+buildpack will participate, however since it is the default web server, the
+buildpack will also participate if the environment variable isn't set at all.
 
 The buildpack will do the following:
 * At run time:
@@ -23,8 +27,9 @@ This buildpack `requires` `php` at launch time, and will also optionally
 
 ### `BP_PHP_WEB_DIR`
 The web directory or document root can be configured via the `BP_PHP_WEB_DIR`
-environment variable. Set the environment variables at build time either
-directly  or through a [`project.toml`
+environment variable as a relative path under the app directory. Set the
+environment variables at build time either directly  or through a
+[`project.toml`
 file](https://github.com/buildpacks/spec/blob/main/extensions/project-descriptor.md).
 
 #### `pack build` flag
