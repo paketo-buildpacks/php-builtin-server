@@ -1,6 +1,7 @@
 package phpbuiltinserver
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -10,6 +11,20 @@ import (
 
 func Detect() packit.DetectFunc {
 	return func(context packit.DetectContext) (packit.DetectResult, error) {
+		webDir := context.WorkingDir
+		if wd, ok := os.LookupEnv("BP_PHP_WEB_DIR"); ok {
+			webDir = filepath.Join(context.WorkingDir, wd)
+		}
+
+		files, err := filepath.Glob(filepath.Join(webDir, "*.php"))
+		if err != nil {
+			return packit.DetectResult{}, err
+		}
+
+		if len(files) == 0 {
+			return packit.DetectResult{}, packit.Fail.WithMessage(fmt.Sprintf("no *.php files found at: %s", webDir))
+		}
+
 		if server, ok := os.LookupEnv("BP_PHP_SERVER"); ok {
 			if server != "php-server" {
 				return packit.DetectResult{}, packit.Fail

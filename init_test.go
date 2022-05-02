@@ -10,6 +10,6 @@ import (
 func TestUnitBuiltinServer(t *testing.T) {
 	suite := spec.New("phpbuiltinserver", spec.Report(report.Terminal{}))
 	suite("Build", testBuild)
-	suite("Detect", testDetect)
+	suite("Detect", testDetect, spec.Sequential())
 	suite.Run(t)
 }
