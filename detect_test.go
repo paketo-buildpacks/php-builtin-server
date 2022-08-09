@@ -87,7 +87,7 @@ func testDetect(t *testing.T, context spec.G, it spec.S) {
 
 		context("$COMPOSER is set to an existent file", func() {
 			it.Before(func() {
-				Expect(os.Setenv("COMPOSER", "some/other-file.json")).To(Succeed())
+				t.Setenv("COMPOSER", "some/other-file.json")
 				Expect(os.Mkdir(filepath.Join(workingDir, "some"), os.ModeDir|os.ModePerm)).To(Succeed())
 				Expect(os.WriteFile(filepath.Join(workingDir, "some", "other-file.json"), []byte(""), os.ModePerm)).To(Succeed())
 			})
@@ -125,10 +125,7 @@ func testDetect(t *testing.T, context spec.G, it spec.S) {
 		context("BP_PHP_SERVER", func() {
 			context("set to php-server", func() {
 				it.Before(func() {
-					os.Setenv("BP_PHP_SERVER", "php-server")
-				})
-				it.After(func() {
-					os.Unsetenv("BP_PHP_SERVER")
+					t.Setenv("BP_PHP_SERVER", "php-server")
 				})
 
 				it("detection passes", func() {
@@ -152,10 +149,7 @@ func testDetect(t *testing.T, context spec.G, it spec.S) {
 
 			context("set to something else", func() {
 				it.Before(func() {
-					os.Setenv("BP_PHP_SERVER", "different-server")
-				})
-				it.After(func() {
-					os.Unsetenv("BP_PHP_SERVER")
+					t.Setenv("BP_PHP_SERVER", "different-server")
 				})
 
 				it("detection fails", func() {
@@ -170,12 +164,12 @@ func testDetect(t *testing.T, context spec.G, it spec.S) {
 
 	context("when BP_PHP_WEB_DIR is set", func() {
 		it.Before(func() {
-			Expect(os.Setenv("BP_PHP_WEB_DIR", "web-dir")).To(Succeed())
+			t.Setenv("BP_PHP_WEB_DIR", "web-dir")
 			Expect(os.Mkdir(filepath.Join(workingDir, "web-dir"), os.ModePerm)).To(Succeed())
 		})
+
 		it.After(func() {
 			Expect(os.RemoveAll(filepath.Join(workingDir, "web-dir"))).To(Succeed())
-			Expect(os.Unsetenv("BP_PHP_WEB_DIR")).To(Succeed())
 		})
 
 		context("the web dir contains a .php file", func() {
@@ -231,11 +225,7 @@ func testDetect(t *testing.T, context spec.G, it spec.S) {
 	context("failure cases", func() {
 		context("the web directory .php file path cannot be globbed", func() {
 			it.Before(func() {
-				Expect(os.Setenv("BP_PHP_WEB_DIR", "\\")).To(Succeed())
-			})
-
-			it.After(func() {
-				Expect(os.Unsetenv("BP_PHP_WEB_DIR")).To(Succeed())
+				t.Setenv("BP_PHP_WEB_DIR", "\\")
 			})
 
 			it("returns an error", func() {
@@ -249,11 +239,8 @@ func testDetect(t *testing.T, context spec.G, it spec.S) {
 		context("$COMPOSER is set to a non-existent file", func() {
 			it.Before(func() {
 				Expect(os.Mkdir(filepath.Join(workingDir, "composer-dir"), 0000)).To(Succeed())
-				Expect(os.Setenv("COMPOSER", filepath.Join("composer-dir", "some-composer"))).To(Succeed())
-			})
+				t.Setenv("COMPOSER", filepath.Join("composer-dir", "some-composer"))
 
-			it.After(func() {
-				Expect(os.Unsetenv("COMPOSER")).To(Succeed())
 			})
 
 			it("returns an error", func() {
