@@ -93,11 +93,9 @@ func testBuild(t *testing.T, context spec.G, it spec.S) {
 
 	context("a web directory is specified via $BP_PHP_WEB_DIR", func() {
 		it.Before(func() {
-			os.Setenv("BP_PHP_WEB_DIR", "some-web-dir")
+			t.Setenv("BP_PHP_WEB_DIR", "some-web-dir")
 		})
-		it.After(func() {
-			os.Unsetenv("BP_PHP_WEB_DIR")
-		})
+
 		it("returns a result that provides a PHP server start command on $BP_PHP_WEB_DIR", func() {
 			result, err := build(packit.BuildContext{
 				WorkingDir: workingDir,
