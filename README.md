@@ -1,4 +1,4 @@
-# Paketo PHP Built-in Web Server Cloud Native Buildpack
+# Paketo Buildpack for PHP Built-in Web Server Cloud Native
 The PHP Built-in Web Server Buildpack sets up and runs PHP's built-in web
 server to support PHP applications
 
