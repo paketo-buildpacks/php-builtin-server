@@ -27,7 +27,7 @@ func Detect() packit.DetectFunc {
 
 		if server, ok := os.LookupEnv("BP_PHP_SERVER"); ok {
 			if server != "php-server" {
-				return packit.DetectResult{}, packit.Fail
+				return packit.DetectResult{}, packit.Fail.WithMessage("BP_PHP_SERVER is not set to 'php-server'")
 			}
 		}
 
