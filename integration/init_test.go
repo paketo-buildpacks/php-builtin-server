@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"runtime"
 	"testing"
 	"time"
 
@@ -32,30 +33,31 @@ var (
 func TestIntegration(t *testing.T) {
 	Expect := NewWithT(t).Expect
 
-	file, err := os.Open("../integration.json")
+	integrationFile, err := os.Open("../integration.json")
 	Expect(err).NotTo(HaveOccurred())
 
-	Expect(json.NewDecoder(file).Decode(&Config)).To(Succeed())
-	Expect(file.Close()).To(Succeed())
+	Expect(json.NewDecoder(integrationFile).Decode(&Config)).To(Succeed())
+	Expect(integrationFile.Close()).To(Succeed())
 
-	file, err = os.Open("../buildpack.toml")
+	buildpackFile, err := os.Open("../buildpack.toml")
 	Expect(err).NotTo(HaveOccurred())
 
-	_, err = toml.NewDecoder(file).Decode(&buildpackInfo)
+	_, err = toml.NewDecoder(buildpackFile).Decode(&buildpackInfo)
 	Expect(err).NotTo(HaveOccurred())
-	Expect(file.Close()).To(Succeed())
+	Expect(buildpackFile.Close()).To(Succeed())
 
 	root, err := filepath.Abs("./..")
 	Expect(err).ToNot(HaveOccurred())
 
 	buildpackStore := occam.NewBuildpackStore()
+	targetedBuildpackStore := buildpackStore.WithTarget("linux/" + runtime.GOARCH)
 
 	buildpack, err = buildpackStore.Get.
 		WithVersion("1.2.3").
 		Execute(root)
 	Expect(err).ToNot(HaveOccurred())
 
-	phpDistBuildpack, err = buildpackStore.Get.
+	phpDistBuildpack, err = targetedBuildpackStore.Get.
 		Execute(Config.PhpDist)
 	Expect(err).ToNot(HaveOccurred())
 

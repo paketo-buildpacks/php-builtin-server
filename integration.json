@@ -1,4 +1,7 @@
 {
-  "builder": "index.docker.io/paketobuildpacks/builder:buildpackless-full",
+  "builders": [
+    "index.docker.io/paketobuildpacks/builder-jammy-buildpackless-full:latest",
+    "index.docker.io/paketobuildpacks/ubuntu-noble-builder-buildpackless:latest"
+  ],
   "php-dist": "github.com/paketo-buildpacks/php-dist"
 }

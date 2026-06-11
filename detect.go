@@ -1,7 +1,6 @@
 package phpbuiltinserver
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 
@@ -22,7 +21,7 @@ func Detect() packit.DetectFunc {
 		}
 
 		if len(files) == 0 {
-			return packit.DetectResult{}, packit.Fail.WithMessage(fmt.Sprintf("no *.php files found at: %s", webDir))
+			return packit.DetectResult{}, packit.Fail.WithMessage("no *.php files found at: %s", webDir)
 		}
 
 		if server, ok := os.LookupEnv("BP_PHP_SERVER"); ok {
